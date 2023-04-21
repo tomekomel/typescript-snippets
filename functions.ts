@@ -5,17 +5,17 @@ type Greet = (name: string) => void;
 
 // if we want to describe something callable with properties
 type GreetWithProperties = {
-    properties: Record<string, string>;
-    (name: string): void;
-}
+  properties: Record<string, string>;
+  (name: string): void;
+};
 // usage
 function greet(fn: GreetWithProperties) {
-    console.log('Test Greet: ', fn.properties, fn('Patrick'));
+  console.log("Test Greet: ", fn.properties, fn("Patrick"));
 }
 
 // Generics are used to describe the correspondence between the two values
 function firstElement<Type>(array: Type[]): Type | undefined {
-    return array[0];
+  return array[0];
 }
 // By adding Type we've created a link between the input and the output types
 
@@ -26,23 +26,22 @@ const u = firstElement([]);
 
 // we can constrain the acceptable types by adding extends
 function longest<Type extends { length: number }>(a: Type, b: Type): Type {
-    if (a.length > b.length) {
-        return a;
-    } else {
-        return b;
-    }
+  if (a.length > b.length) {
+    return a;
+  } else {
+    return b;
+  }
 }
 
 const longestArray = longest([1, 2, 3], [2, 3, 5, 6]);
 const wrongUsage = longestArray(2, 3);
 
-
 // Guidelines to write good function generics
 function firstElement1<Type>(arr: Type[]) {
-    return arr[0];
+  return arr[0];
 }
 function firstElement2<Type extends any[]>(arr: Type) {
-    return arr[0];
+  return arr[0];
 }
 
 // a: number (good)
@@ -57,9 +56,20 @@ const b = firstElement2([1, 2, 3]);
 // Function parameters:
 // - optional
 function f(n?: number) {
-    return n.toFixed();
+  return n.toFixed();
 }
 // - default values
 function f10(n = 10): string {
-    return n.toFixed();
+  return n.toFixed();
 }
+
+// optional parameters in callbacks, function statement:
+function mapForEach(array: any[], callback: (arg: any, index?: number) => any) {
+  for (let i = 0; i < array.length; i++) {
+    callback(array[i]);
+  }
+}
+// usage:
+mapForEach([1, 2, 3], (a, i) => {
+  console.log(i.toFixed());
+});
