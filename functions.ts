@@ -107,3 +107,21 @@ function len2(x: any[] | string) {
 }
 // Always prefer parameters with union types instead of overloads when possible ^^
 
+// The inferred return type is void
+function noop() {
+  return;
+}
+// in TypeScript void and undefined are not the same
+
+// unknown, unknown is safer then any because it doesn't allow to do anything with an unknown value
+function f1(a: any) {
+  a.b(); // OK
+}
+function f2(a: unknown) {
+  a.b();
+}
+
+// never
+function fail(msg: string): never {
+  throw new Error(msg);
+}
