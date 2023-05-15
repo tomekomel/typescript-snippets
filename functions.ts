@@ -34,6 +34,7 @@ function longest<Type extends { length: number }>(a: Type, b: Type): Type {
 }
 
 const longestArray = longest([1, 2, 3], [2, 3, 5, 6]);
+// @ts-ignore
 const wrongUsage = longestArray(2, 3);
 
 // Guidelines to write good function generics
@@ -56,6 +57,7 @@ const b = firstElement2([1, 2, 3]);
 // Function parameters:
 // - optional
 function f(n?: number) {
+  // @ts-ignore
   return n.toFixed();
 }
 // - default values
@@ -71,6 +73,7 @@ function mapForEach(array: any[], callback: (arg: any, index?: number) => any) {
 }
 // Usage:
 mapForEach([1, 2, 3], (a, i) => {
+  // @ts-ignore
   console.log(i.toFixed());
 });
 
@@ -88,6 +91,7 @@ function makeDate(mOrTimestamp: number, d?: number, y?: number): Date {
 // Usage:
 const d1 = makeDate(1123123);
 const d2 = makeDate(4, 5, 5);
+// @ts-ignore
 const d3 = makeDate(1, 3); // Error
 
 // Writing good overloads
@@ -98,6 +102,7 @@ function len(x: any) {
 }
 
 // Error:
+// @ts-ignore
 len(Math.random() > 0.5 ? "hello" : [0]);
 
 // If both overloads have the same argument count and same return time it's better
@@ -118,6 +123,7 @@ function f1(a: any) {
   a.b(); // OK
 }
 function f2(a: unknown) {
+  // @ts-ignore
   a.b();
 }
 
@@ -139,6 +145,7 @@ const result = multiply(10, 1, 2, 3, 4);
 // Inferred type is number[] -- "an array with zero or more numbers",
 // not specifically two numbers, atan2 expects exactly two parameters
 const args = [8, 5];
+// @ts-ignore
 const angle = Math.atan2(...args);
 
 // Inferred as 2-length tuple
@@ -152,3 +159,37 @@ type ABC = { a: number; b: number; c: number };
 function sum({ a, b, c }: ABC) {
   console.log(a + b + c);
 }
+
+// Return type void
+// Contextual typing with a return type of void does not force functions to not return something.
+type voidFunc = () => void;
+
+const ff1: voidFunc = () => {
+  return true;
+};
+const ff2: voidFunc = () => true;
+const ff3: voidFunc = function () {
+  return true;
+};
+
+const specificVoidFunction: voidFunc = () => {
+  return 'some-string';
+}
+const v1 = ff1();
+
+// This behavior exists so that the following code is valid
+// even though Array.prototype.push returns a number
+// and the Array.prototype.forEach method expects
+// a function with a return type of void.
+const src = [1, 2, 3];
+const dst = [0];
+src.forEach((el) => dst.push(el));
+
+function fff2(): void {
+  // @ts-expect-error
+  return true;
+}
+const fff3 = function (): void {
+  // @ts-expect-error
+  return true;
+};
