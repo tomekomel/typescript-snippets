@@ -125,3 +125,30 @@ function f2(a: unknown) {
 function fail(msg: string): never {
   throw new Error(msg);
 }
+
+// Rest parameters
+// A rest parameter appears after all other parameters, and uses the ... syntax:
+// If we want to declare generic type for rest parameters we must use Array<T> or T[]
+function multiply(n: number, ...m: number[]) {
+  return m.map((x) => n * x);
+}
+// 'a' gets value [10, 20, 30, 40]
+const result = multiply(10, 1, 2, 3, 4);
+
+// Note that in general, TypeScript does not assume that arrays are immutable.
+// Inferred type is number[] -- "an array with zero or more numbers",
+// not specifically two numbers, atan2 expects exactly two parameters
+const args = [8, 5];
+const angle = Math.atan2(...args);
+
+// Inferred as 2-length tuple
+const argsCorrect = [8, 5] as const;
+// OK
+const angleCorrect = Math.atan2(...argsCorrect);
+
+// Parameter destructuring
+// Same as prior example
+type ABC = { a: number; b: number; c: number };
+function sum({ a, b, c }: ABC) {
+  console.log(a + b + c);
+}
