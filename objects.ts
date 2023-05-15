@@ -28,3 +28,36 @@ function draw({ shape: ShapeObject, xPos: number = 100, yPos = 0 }: ShapeObject)
     console.log(yPos);
 }
 
+// readonly properties
+interface SomeType {
+    readonly prop: string;
+}
+
+function doSomething(obj: SomeType) {
+    // We can read from 'obj.prop'.
+    console.log(`prop has the value '${obj.prop}'.`);
+
+    // But we can't re-assign it.
+    obj.prop = "hello";
+}
+// It doesn't mean it's content can't be changed (if it's an object).
+// But we can't reassign to that property
+
+interface Person {
+    name: string;
+    age: number;
+}
+interface ReadonlyPerson {
+    readonly name: string;
+    readonly age: number;
+}
+let writablePerson: Person = {
+    name: "Person McPersonface",
+    age: 42,
+};
+// works, this is like aliasing to already created object
+let readonlyPerson: ReadonlyPerson = writablePerson;
+
+console.log(readonlyPerson.age); // prints '42'
+writablePerson.age++;
+console.log(readonlyPerson.age); // prints '43'
